@@ -3,9 +3,15 @@ from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QHBoxLayout,
 QPushButton, QLabel, QFileDialog, QListWidget)
 
 from PyQt5.QtCore import Qt
+
 from PyQt5.QtGui import QPixmap
 from PIL import Image
 
+from PIL.ImageFilter import(
+    BLUR, CONTOUR, DETAIL, EDGE_ENHANCE, EDGE_ENHANCE_MORE,
+    EMBOSS, FIND_EDGES, SHARPEN, SMOOTH, SMOOTH_MORE,
+    GaussianBlur, UnsharpMask
+)
 
 app = QApplication([])
 window = QWidget()
@@ -19,6 +25,16 @@ button_right = QPushButton("Вправо")
 button_mirror = QPushButton("Зеркало")
 button_sharp = QPushButton("Резкость")
 button_nw = QPushButton("Ч\Б")
+button_blur = QPushButton("Размытие")
+button_smooth = QPushButton("Сглаживание")
+button_detail = QPushButton("Детализация")
+button_emboss = QPushButton("Тиснение")
+button_gaussian = QPushButton("По Гаусу")
+button_contour = QPushButton("Контур")
+button_edge_enhance = QPushButton("Усиление ")
+button_unsharpmask = QPushButton("Нерезкость")
+button_edge_enhance_more = QPushButton("Усиленная резкость")
+button_smooth_more = QPushButton("Больше сглаживания")
 file_list = QListWidget()
 
 row = QHBoxLayout()
@@ -39,6 +55,26 @@ row.addLayout(col1)
 row.addLayout(col2)
 window.setLayout(row)
 window.show()
+
+row2_buttons = QHBoxLayout()
+row2_buttons.addWidget(button_blur)
+row2_buttons.addWidget(button_smooth)
+row2_buttons.addWidget(button_detail)
+row2_buttons.addWidget(button_emboss)
+row2_buttons.addWidget(button_gaussian)
+
+col2.addLayout(row2_buttons)
+
+col2.addLayout(row_buttons)
+row3_buttons = QHBoxLayout()
+row3_buttons.addWidget
+row3_buttons.addWidget(button_contour)
+row3_buttons.addWidget(button_edge_enhance)
+row3_buttons.addWidget(button_unsharpmask)
+row3_buttons.addWidget(button_edge_enhance_more)
+row3_buttons.addWidget(button_smooth_more)
+
+col2.addLayout(row3_buttons)
 
 work_directory = ""
 
@@ -65,7 +101,7 @@ def showfilelist():
 
 button_directory.clicked.connect(showfilelist)
 
-class ImageProcessor:
+class ImageProcessor():
     def __init__(self):
         self.image = None
         self.filename = None
@@ -87,23 +123,107 @@ class ImageProcessor:
         image_label.show()
 
     def do_blackwhite(self):
-        if self.image == self.image.convert("L"):
-            self.saveImage()
-            image_path = os.path.join(self.save_dir, self.filename)
-            self.showImage(image_path)
+        self.image = self.image.convert("L")
+        self.saveImage()
+        image_path = os.path.join(self.save_dir, self.filename)
+        self.showImage(image_path)
+
+    def do_left(self):
+        self.image = self.image.transpose(Image.ROTATE_90)
+        self.saveImage()
+        image_path = os.path.join(self.save_dir, self.filename)
+        self.showImage(image_path)
+
+    def do_right(self):
+        self.image = self.image.transpose(Image.ROTATE_270)
+        self.saveImage()
+        image_path = os.path.join(self.save_dir, self.filename)
+        self.showImage(image_path)
+
+    def do_sharp(self):
+        self.image = self.image.convert("RGB")
+        self.image = self.image.filter(SHARPEN)
+        self.saveImage()
+        image_path = os.path.join(self.save_dir, self.filename)
+        self.showImage(image_path)
+
+    
+
+    def do_flip(self):
+        self.image = self.image.transpose(Image.FLIP_LEFT_RIGHT)
+        self.saveImage()
+        image_path = os.path.join(self.save_dir, self.filename)
+        self.showImage(image_path)
+
+    def do_blur(self):
+        self.image = self.image.filter(BLUR)
+        self.saveImage()
+        image_path = os.path.join(self.save_dir, self.filename)
+        self.showImage(image_path)
+
+    def do_smooth(self):
+        self.image = self.image.filter(SMOOTH)
+        self.saveImage()
+        image_path = os.path.join(self.save_dir, self.filename)
+        self.showImage(image_path)
+
+    def do_detail(self):
+        self.image = self.image.filter(DETAIL)
+        self.saveImage()
+        image_path = os.path.join(self.save_dir, self.filename)
+        self.showImage(image_path)
+
+    def do_emboss(self):
+        self.image = self.image.filter(EMBOSS)
+        self.saveImage()
+        image_path = os.path.join(self.save_dir, self.filename)
+        self.showImage(image_path)
+
+    def do_gaussian(self):
+        self.image = self.image.convert("RGB")
+        self.image = self.image.filter(GaussianBlur)
+        self.saveImage()
+        image_path = os.path.join(self.save_dir, self.filename)
+        self.showImage(image_path)
+
+    def do_contour(self):
+        self.image = self.image.filter(CONTOUR)
+        self.saveImage()
+        image_path = os.path.join(self.save_dir, self.filename)
+        self.showImage(image_path)
+
+    def do_edge_enhance(self):
+        self.image = self.image.filter(EDGE_ENHANCE)
+        self.saveImage()
+        image_path = os.path.join(self.save_dir, self.filename)
+        self.showImage(image_path)
+
+    def do_unsharpmask(self):
+        self.image = self.image.filter(UnsharpMask)
+        self.saveImage()
+        image_path = os.path.join(self.save_dir, self.filename)
+        self.showImage(image_path)
+
+    def do_edge_enhance_more(self):
+        self.image = self.image.filter(EDGE_ENHANCE_MORE)
+        self.saveImage()
+        image_path = os.path.join(self.save_dir, self.filename)
+        self.showImage(image_path)
+
+    def do_smooth_more(self):
+        self.image = self.image.filter(SMOOTH_MORE)
+        self.saveImage()
+        image_path = os.path.join(self.save_dir, self.filename)
+        self.showImage(image_path)
+
 
     def saveImage(self):
-        path = os.path.join(self.save_dir, self.filename)
+        path = os.path.join(self.dir, self.save_dir)
         if not(os.path.exists(path) or os.path.isdir(path)):
-            os.mkdir(self.save_dir)
-        image_path = os.path.join(self.dir, self.filename)
+            os.mkdir(path)
+        image_path = os.path.join(path, self.filename)
         self.image.save(image_path)
     
-        
-
-
-
-
 def showChosenImage():
     if file_list.currentRow() >= 0:
         filename = file_list.currentItem().text()
@@ -114,12 +234,20 @@ def showChosenImage():
 workimage = ImageProcessor()
 file_list.currentRowChanged.connect(showChosenImage)
 button_nw.clicked.connect(workimage.do_blackwhite)
-
-
-
-
-
-
+button_left.clicked.connect(workimage.do_left)
+button_right.clicked.connect(workimage.do_right)
+button_sharp.clicked.connect(workimage.do_sharp)
+button_mirror.clicked.connect(workimage.do_flip)
+button_blur.clicked.connect(workimage.do_blur)
+button_smooth.clicked.connect(workimage.do_smooth) 
+button_detail.clicked.connect(workimage.do_detail)
+button_emboss.clicked.connect(workimage.do_emboss)
+button_gaussian.clicked.connect(workimage.do_gaussian)
+button_contour.clicked.connect(workimage.do_contour)
+button_edge_enhance.clicked.connect(workimage.do_edge_enhance)
+button_unsharpmask.clicked.connect(workimage.do_unsharpmask)
+button_edge_enhance_more.clicked.connect(workimage.do_edge_enhance_more)
+button_smooth_more.clicked.connect(workimage.do_smooth_more)
 app.exec()
 
 
